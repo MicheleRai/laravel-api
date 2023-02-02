@@ -4,6 +4,8 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+const { default: Axios } = require('axios');
+
 require('./bootstrap');
 
 window.Vue = require('vue');
@@ -30,3 +32,30 @@ window.Vue = require('vue');
 // const app = new Vue({
 //     el: '#app',
 // });
+
+const inputTitle = document.querySelector('[data-sluger=title]');
+const inputSlug = document.querySelector('[data-sluger=slug]');
+const btnGetSlug = document.querySelector('[data-sluger=button]');
+
+if (inputTitle && inputSlug && btnGetSlug) {
+
+    inputTitle.addEventListener('focusout', function () {
+        if (inputSlug.value === '') {
+            getSlug(inputSlug.value);
+        }
+    });
+
+    btnGetSlug.addEventListener('focusout', function () {
+
+        getSlug(inputSlug.value);
+    });
+
+    function getSlug(title) {
+        let slug;
+        Axios.get('/admin/categories/slug?title=' + title)
+            .then(response => inputSlug.value= response.data.slug);
+    }
+
+}
+
+
